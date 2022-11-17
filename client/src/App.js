@@ -1,26 +1,33 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
+import SignUp from './components/SignUp';
+import LoggedIn from './components/LoggedIn';
 
 function App() {
-  const [data, setData] = React.useState(null);
-  const [data2, setData2] = React.useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [name, setName] = useState('');
+  
 
-  React.useEffect(() => {
-    fetch("/api/cID=123")
-      .then((res) => res.json())
-      .then((data) => setData2(data.message));
+  // React.useEffect(() => {
+  //   fetch("/test")
+  //     .then((res) => res.json())
+  //     .then((data) => setData2(data.message));
 
-    fetch("/api")
+  //   fetch("/api")
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data.message));
+  // }, []);
+
+  React.useEffect(() =>{
+    fetch("/loggedin")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+      .then((data) => setName(data.name))
+      .then(() => setLoggedIn(true));
+  })
 
   return (
     <div>
-      <h1>Hello Wordl!</h1>
-      <h2>test</h2>
-      <p>{!data ? "Loading..." : data}</p>
-      <p>{!data2 ? "Loading..." : data2}</p>
+      {loggedIn ? <LoggedIn name={name} /> : <SignUp />}
     </div>
   );
 }

@@ -1,13 +1,15 @@
 // server/index.js
+const path = require("path");
 const express = require("express");
-const { MongoClient } = require("mongodb");
 const PORT = process.env.PORT || 3001;
-
-const uri = "mongodb://127.0.0.1/?maxPoolSize=20&w=majority";
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
+
+const { MongoClient } = require("mongodb");
+const uri = "mongodb://127.0.0.1/?maxPoolSize=20&w=majority";
 const client = new MongoClient(uri);
-
 async function run(){
     try{
         // Connect the client to the server
@@ -30,6 +32,14 @@ async function run(){
 }
 
 run().catch(console.dir);
+
+//Gets the value back from the form ready to add to the database then renders the page back
+app.post("/Submit-Form", (req, res) => {
+    console.log(`Email: ${req.body.Email}`);
+    console.log(`Password: ${req.body.Password}`);
+    res.redirect('../client/src/App.js')
+    res.end();
+});
 
 app.get("/api/:cID", (req, res) => {
     console.log(req.params.cID);
