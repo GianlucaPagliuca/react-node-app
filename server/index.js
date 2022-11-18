@@ -3,8 +3,9 @@ const path = require("path");
 const express = require("express");
 const PORT = process.env.PORT || 3001;
 const app = express();
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 
 
 const { MongoClient } = require("mongodb");
@@ -37,7 +38,16 @@ run().catch(console.dir);
 app.post("/Submit-Form", (req, res) => {
     console.log(`Email: ${req.body.Email}`);
     console.log(`Password: ${req.body.Password}`);
-    res.redirect('../client/src/App.js')
+    console.log('Create account');
+    res.redirect('../client/src/App.js');
+    res.end();
+});
+
+app.post("/Login", (req, res) => {
+    console.log(`Email: ${req.body.Email}`);
+    console.log(`Password: ${req.body.Password}`);
+    console.log('Login');
+    //res.redirect('../client/src/App.js');
     res.end();
 });
 
